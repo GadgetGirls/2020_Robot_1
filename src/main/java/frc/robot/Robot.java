@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+/**
+ * Import the libraries and classes you will use here
+ */
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -21,6 +24,16 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * directory.
  */
 public class Robot extends TimedRobot {
+  /**
+   * Declare all your objects here
+   *
+   * SpeedControllers
+   * SpeedControllerGroup
+   * DifferentialDrive
+   * Joystick (or other controller types)
+   * Compressor (for pneumatics)
+   * Solenoids (pneumatic pistons)
+   */
   private final DifferentialDrive m_robotDrive
       = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
   private final Joystick m_stick = new Joystick(0);
@@ -32,6 +45,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    /**
+     * Instantiate your objects from above and assign them here
+     */
   }
 
   /**
@@ -50,7 +66,13 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
-      m_robotDrive.arcadeDrive(0.5, 0.0); // drive forwards half speed
+      /**
+       * At first, we can operate individual motors for 2 seconds here for debugging
+       * Later, we will operate the robotDrive subclass to drive the robot
+       */
+
+
+      // m_robotDrive.arcadeDrive(0.5, 0.0); // drive forwards half speed
     } else {
       m_robotDrive.stopMotor(); // stop robot
     }
@@ -68,7 +90,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_robotDrive.arcadeDrive(m_stick.getY(), m_stick.getX());
+    // m_robotDrive.arcadeDrive(m_stick.getY(), m_stick.getX());
   }
 
   /**
