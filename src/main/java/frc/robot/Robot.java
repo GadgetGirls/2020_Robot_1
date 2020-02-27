@@ -10,10 +10,17 @@ package frc.robot;
 /**
  * Import the libraries and classes you will use here
  */
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
@@ -27,16 +34,19 @@ public class Robot extends TimedRobot {
   /**
    * Declare all your objects here
    *
-   * SpeedControllers
+   * SpeedControllers (CANSparkMax)
    * SpeedControllerGroup
    * DifferentialDrive
    * Joystick (or other controller types)
    * Compressor (for pneumatics)
    * Solenoids (pneumatic pistons)
    */
-  private final DifferentialDrive m_robotDrive
-      = new DifferentialDrive(new PWMVictorSPX(0), new PWMVictorSPX(1));
-  private final Joystick m_stick = new Joystick(0);
+  private CANSparkMax m_leftFrontMotor, m_leftRearMotor;
+  private CANSparkMax m_rightFrontMotor, m_rightRearMotor;
+  private SpeedControllerGroup m_leftMotors, m_rightMotors;
+  private DifferentialDrive m_robotDrive;
+  private Compressor m_compressor; 
+  private XboxController m_stick;
   private final Timer m_timer = new Timer();
 
   /**
@@ -47,9 +57,18 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     /**
      * Instantiate your objects from above and assign them here
+     * 
+     * CAN Bus device IDS: 
+     * https://docs.wpilib.org/en/latest/docs/software/can-devices/can-addressing.html
      */
+    m_leftFrontMotor = new CANSparkMax(0, CANSparkMaxLowLevel.MotorType.kBrushless);
+    m_rightFrontMotor = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    m_leftRearMotor = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    m_rightRearMotor = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    m_leftMotors = new SpeedControllerGroup(m_leftFrontMotor, m_leftRearMotor);
+    m_rightMotors = new SpeedControllerGroup(m_rightFrontMotor, m_rightRearMotor);
+    m_robotDrive = new DifferentialDrive(m_leftMotors, m_rightMotors);
   }
-
   /**
    * This function is run once each time the robot enters autonomous mode.
    */
